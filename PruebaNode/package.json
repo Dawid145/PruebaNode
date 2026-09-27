@@ -1,0 +1,10 @@
+{
+  "name": "prueba-node-solicitante",
+  "version": "1.0.0",
+  "description": "Proyecto de prueba para Solicitante-Compilador",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --check server.js"
+  }
+}
