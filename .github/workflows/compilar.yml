@@ -1,39 +1,30 @@
-name: Compilar proyecto
+name: Node Build
 
 on:
   workflow_dispatch:
 
 jobs:
-  preparar:
+  build:
     runs-on: ubuntu-latest
 
-    steps:
+    permissions:
+      contents: read
 
-      - name: Descargar proyecto
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Mostrar archivos recibidos
-        run: |
-          echo "================================"
-          echo "SOLICITANTE-COMPILADOR"
-          echo "================================"
-          echo "Proyecto recibido correctamente."
-          echo ""
-          echo "Archivos del proyecto:"
-          find . -maxdepth 5 -type f \
-            ! -path "./.git/*"
-          echo ""
-          echo "================================"
-
-      - name: Crear resultado de prueba
-        run: |
-          echo "Compilación de prueba ejecutada correctamente." > resultado.txt
-          echo "Repositorio: $GITHUB_REPOSITORY" >> resultado.txt
-          echo "Commit: $GITHUB_SHA" >> resultado.txt
-
-      - name: Guardar resultado
-        uses: actions/upload-artifact@v4
+      - name: Node.js
+        uses: actions/setup-node@v4
         with:
-          name: resultado-compilacion
-          path: resultado.txt
-          retention-days: 7
+          node-version: '20'
+
+      - name: Instalar dependencias
+        shell: bash
+        run: |
+          npm install
+
+      - name: Ejecutar pruebas
+        shell: bash
+        run: |
+          npm test --if-present
